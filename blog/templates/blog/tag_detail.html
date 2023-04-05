@@ -1,15 +1,7 @@
 {% extends "blog/base.html" %}
 {% block content %}
     <h1>Posts by tag "{{ view.kwargs.title }}":</h1>
-    {{ view.kwarg.descriptions }}
-    {% for post in posts %}
-        {% for tag in post.tags.all %}
-            {% if view.kwargs.title == tag.title %}
-                 <a>{{tag.descriptions}}</a>
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-    <a> {{ b }}</a>
+    <h2>{{ current_tag.description }}</h2>
     {% for post in posts %}
         <article class="media content-section">
           <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}" alt="">
