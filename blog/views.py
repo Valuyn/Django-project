@@ -47,6 +47,11 @@ class TagPostListView(ListView):
         t_tag = get_object_or_404(Tag, title=self.kwargs.get("title"))
         return Post.objects.filter(tags=t_tag).order_by('-date_posted')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_tag"] = get_object_or_404(Tag, title=self.kwargs.get("title"))
+        return context
+
 
 
 
