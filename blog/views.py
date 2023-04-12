@@ -40,12 +40,19 @@ class UserPostListView(ListView):
 class TagPostListView(ListView):
     model = Post
     template_name = 'blog/tag_detail.html'
-    context_object_name = 'posts', 'tag'
+    context_object_name = 'posts'
     paginate_by = 5
 
     def get_queryset(self):
         t_tag = get_object_or_404(Tag, title=self.kwargs.get("title"))
         return Post.objects.filter(tags=t_tag).order_by('-date_posted')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_tag"] = get_object_or_404(Tag, title=self.kwargs.get("title"))
+        return context
+
+
 
 
 class PostDetailView(DetailView):
