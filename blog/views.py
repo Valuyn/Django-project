@@ -19,6 +19,9 @@ def home(request):
 
 
 class PostListView(ListView):
+    """
+    Class for showing all post of this blog, by 5 post at every page
+    """
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
@@ -27,6 +30,9 @@ class PostListView(ListView):
 
 
 class UserPostListView(ListView):
+    """
+    Class for filter posts by picked user
+    """
     model = Post
     template_name = 'blog/user_posts.html'
     context_object_name = 'posts'
@@ -38,6 +44,9 @@ class UserPostListView(ListView):
 
 
 class TagPostListView(ListView):
+    """
+    class  for filter posts by selected tag
+    """
     model = Post
     template_name = 'blog/tag_detail.html'
     context_object_name = 'posts'
@@ -56,10 +65,16 @@ class TagPostListView(ListView):
 
 
 class PostDetailView(DetailView):
+    """
+    View about detail of every post
+    """
     model = Post
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
+    """
+    creating new post
+    """
     model = Post
     fields = ['title', 'content', 'tags']
 
@@ -69,6 +84,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """
+    updating existing post
+    """
     model = Post
     fields = ['title', 'content', 'tags']
 
@@ -84,6 +102,9 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """
+    deleting existing post
+    """
     model = Post
     success_url = '/'
 
@@ -95,6 +116,9 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class TagListView(ListView):
+    """
+    class with list of all tags
+    """
     model = Tag
     template_name = 'blog/tags.html'
     context_object_name = 'tags'
