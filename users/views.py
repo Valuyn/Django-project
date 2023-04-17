@@ -6,7 +6,7 @@ from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 def register(request):
     """
-    register new user, and redirect to login page if it is successfully, otherwise again on register form
+    register new user, and redirect to login page if form is valid, otherwise again on register form
     """
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
@@ -23,7 +23,7 @@ def register(request):
 @login_required
 def profile(request):
     """
-    creating new profile after registration and update profile after it
+    creating new profile after registration and update profile after itpp
     """
     if request.method == "POST":
         u_form = UserUpdateForm(request.POST, instance=request.user)
