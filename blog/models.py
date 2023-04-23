@@ -17,6 +17,9 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
+    # def get_authors(self):
+    #     return "\n".join([p.author for p in self.author.all()])
+
 
 class Tag(models.Model):
     title = models.CharField(max_length=15)
@@ -27,5 +30,20 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         return reverse('tag-detail', kwargs={'pk': self.pk})
+
+
+class Comment(models.Model):
+    body = models.TextField()
+    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return f'comment by {self.name} on {self.post}'
 
 
