@@ -21,8 +21,12 @@
                         {% endfor %}
 
                     </div>
-                </div>
             {% endif %}
+              <div class="article-metadata"></div>
+                <div class="media-body">
+                    <a href="{% url 'post-detail' post.id %}">Comments({{ post.comments.count }})</a>
+                </div>
+          </div>
         </article>
     {% endfor %}
 {% endblock %}

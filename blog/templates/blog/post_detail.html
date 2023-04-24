@@ -15,6 +15,7 @@
         </div>
         <h2 class="article-title">{{ object.title }}</h2>
         <p class="article-content">{{ object.content }}</p>
+
         {% if post.tags.all %}
             <div>
                 <a>Tags:</a>
@@ -26,4 +27,26 @@
         {% endif %}
       </div>
     </article>
+    <h4 class="article-content">Comments ({{ post.comments.count }}):
+    </h4>
+    <a class="btn-secondary btn-sm mt-1 mb-1" href="{% url 'comment-create' post.pk %}">Add comment</a>
+    {% for comment in post.comments.all %}
+    <article class="media content-section">
+      <img class="rounded-circle article-img" src="{{ comment.name.profile.image.url }}">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" >{{ comment.name }}</a>
+          <small class="text-muted">{{ comment.created|date:"F d, Y" }}</small>
+<!--          {% if comment.name == user %}-->
+<!--              <div>-->
+<!--                <a class="btn-secondary btn-sm mt-1 mb-1" href="#">Update</a>-->
+<!--                <a class="btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>-->
+<!--              </div>-->
+<!--          {% endif %}-->
+        </div>
+        <p class="article-content">{{ comment.body }}</p>
+
+      </div>
+    </article>
+    {% endfor %}
 {% endblock %}

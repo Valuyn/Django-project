@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.urls import reverse
+
+from .forms import CommentForm
 from django.views.generic import (
     ListView,
     DetailView,
@@ -8,7 +11,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .models import Post, Tag
+from .models import Post, Tag, Comment
 
 
 def home(request):
@@ -60,8 +63,6 @@ class TagPostListView(ListView):
         context = super().get_context_data(**kwargs)
         context["current_tag"] = get_object_or_404(Tag, title=self.kwargs.get("title"))
         return context
-
-
 
 
 class PostDetailView(DetailView):
@@ -124,8 +125,40 @@ class TagListView(ListView):
     context_object_name = 'tags'
 
 
-# class TagDetailView(DetailView):
-#     model = Tag
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    """
+    creating new post
+    """
+    model = Comment
+    fields = ['body']
+
+    def form_valid(self, form):
+        form.instance.post_id = self.kwargs['pk']
+        form.instance.name = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        return reverse("post-detail", kwargs={"pk": pk})
+
+
+# class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     """
+#     updating existing post
+#     """
+#     model = Comment
+#     fields = ['body']
+#
+#     def form_valid(self, form):
+#         form.instance.post_id = self.kwargs['pk']
+#         form.instance.name = self.request.user
+#         return super().form_valid(form)
+#
+#     def test_func(self):
+#         comment = self.get_object()
+#         if self.request.user == comment.name:
+#             return True
+#         return False
 
 
 def about(request):
