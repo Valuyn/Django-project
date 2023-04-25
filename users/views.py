@@ -3,7 +3,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
+
 def register(request):
+    """
+    register new user, and redirect to login page if form is valid, otherwise again on register form
+    """
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -15,9 +19,13 @@ def register(request):
         form = UserRegisterForm()
     return render(request, "users/register.html", {'form': form})
 
+
 @login_required
 def profile(request):
-    if request.method=="POST":
+    """
+    creating new profile after registration and update profile after itpp
+    """
+    if request.method == "POST":
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
                                    request.FILES,

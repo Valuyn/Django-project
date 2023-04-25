@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.urls import reverse
+
+from .forms import CommentForm
 from django.views.generic import (
     ListView,
     DetailView,
@@ -8,7 +11,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from .models import Post, Tag
+from .models import Post, Tag, Comment
 
 
 def home(request):
@@ -19,6 +22,9 @@ def home(request):
 
 
 class PostListView(ListView):
+    """
+    Class for showing all post of this blog, by 5 post at every page
+    """
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
@@ -27,6 +33,9 @@ class PostListView(ListView):
 
 
 class UserPostListView(ListView):
+    """
+    Class for filter posts by picked user
+    """
     model = Post
     template_name = 'blog/user_posts.html'
     context_object_name = 'posts'
@@ -38,6 +47,9 @@ class UserPostListView(ListView):
 
 
 class TagPostListView(ListView):
+    """
+    class  for filter posts by selected tag
+    """
     model = Post
     template_name = 'blog/tag_detail.html'
     context_object_name = 'posts'
@@ -53,13 +65,17 @@ class TagPostListView(ListView):
         return context
 
 
-
-
 class PostDetailView(DetailView):
+    """
+    View about detail of every post
+    """
     model = Post
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
+    """
+    creating new post
+    """
     model = Post
     fields = ['title', 'content', 'tags']
 
@@ -69,6 +85,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """
+    updating existing post
+    """
     model = Post
     fields = ['title', 'content', 'tags']
 
@@ -84,6 +103,9 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """
+    deleting existing post
+    """
     model = Post
     success_url = '/'
 
@@ -95,13 +117,48 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 
 class TagListView(ListView):
+    """
+    class with list of all tags
+    """
     model = Tag
     template_name = 'blog/tags.html'
     context_object_name = 'tags'
 
 
-# class TagDetailView(DetailView):
-#     model = Tag
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    """
+    creating new post
+    """
+    model = Comment
+    fields = ['body']
+
+    def form_valid(self, form):
+        form.instance.post_id = self.kwargs['pk']
+        form.instance.name = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        return reverse("post-detail", kwargs={"pk": pk})
+
+
+# class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     """
+#     updating existing post
+#     """
+#     model = Comment
+#     fields = ['body']
+#
+#     def form_valid(self, form):
+#         form.instance.post_id = self.kwargs['pk']
+#         form.instance.name = self.request.user
+#         return super().form_valid(form)
+#
+#     def test_func(self):
+#         comment = self.get_object()
+#         if self.request.user == comment.name:
+#             return True
+#         return False
 
 
 def about(request):
