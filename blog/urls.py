@@ -10,6 +10,7 @@ from .views import (
     TagPostListView,
     CommentCreateView,
     CommentUpdateView,
+    CommentDeleteView
 )
 from . import views
 
@@ -25,5 +26,6 @@ urlpatterns = [
     path('tags/', TagListView.as_view(), name='tag-list'),
     path('post/<int:pk>/comment-create/', CommentCreateView.as_view(), name='comment-create'),
     path('post/<int:post_pk>/comment-update/<int:pk>/', CommentUpdateView.as_view(), name='comment-update'),
+    path('post/<int:post_pk>/comment-delete/<int:pk>/', CommentDeleteView.as_view(), name='comment-delete'),
     path('about/', views.about, name='blog-about'),
 ]

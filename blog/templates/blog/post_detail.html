@@ -40,7 +40,7 @@
               {% if comment.name == user %}
                   <div>
                     <a class="btn-secondary btn-sm mt-1 mb-1" href="{% url 'comment-update' post_pk=post.pk pk=comment.pk %}">Update</a>
-                    <a class="btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                    <a class="btn-danger btn-sm mt-1 mb-1" href="{% url 'comment-delete' post_pk=post.pk pk=comment.pk %}">Delete</a>
                   </div>
               {% endif %}
             </div>

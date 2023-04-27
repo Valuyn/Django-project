@@ -10,6 +10,7 @@ class Post(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', blank=True, related_name='posts')
+    # likes = models.ManyToManyField(User, blank=True, related_name='post_likes')
 
     def __str__(self):
         return self.title
@@ -36,6 +37,7 @@ class Comment(models.Model):
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
     name = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    # likes = models.ManyToManyField(User, blank=True, related_name="comment-likes")
 
     class Meta:
         ordering = ('created',)

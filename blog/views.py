@@ -163,5 +163,22 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse('post-detail', kwargs={"pk": pk})
 
 
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """
+    deleting existing comment
+    """
+    model = Comment
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.name:
+            return True
+        return False
+
+    def get_success_url(self):
+        pk = self.kwargs["post_pk"]
+        return reverse('post-detail', kwargs={"pk": pk})
+
+
 def about(request):
     return render(request, "blog/about.html", {'title': 'About'})
