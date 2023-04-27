@@ -17,9 +17,6 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
-    # def get_authors(self):
-    #     return "\n".join([p.author for p in self.author.all()])
-
 
 class Tag(models.Model):
     title = models.CharField(max_length=15)
@@ -46,4 +43,5 @@ class Comment(models.Model):
     def __str__(self):
         return f'comment by {self.name} on {self.post}'
 
-
+    def get_absolute_url(self):
+        return reverse('comment-create', kwargs={'pk': self.pk})

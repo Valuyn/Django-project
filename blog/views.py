@@ -2,8 +2,6 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.urls import reverse
-
-from .forms import CommentForm
 from django.views.generic import (
     ListView,
     DetailView,
@@ -127,7 +125,7 @@ class TagListView(ListView):
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     """
-    creating new post
+    creating new comment
     """
     model = Comment
     fields = ['body']
@@ -142,23 +140,27 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return reverse("post-detail", kwargs={"pk": pk})
 
 
-# class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-#     """
-#     updating existing post
-#     """
-#     model = Comment
-#     fields = ['body']
-#
-#     def form_valid(self, form):
-#         form.instance.post_id = self.kwargs['pk']
-#         form.instance.name = self.request.user
-#         return super().form_valid(form)
-#
-#     def test_func(self):
-#         comment = self.get_object()
-#         if self.request.user == comment.name:
-#             return True
-#         return False
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """
+    updating existing post
+    """
+    model = Comment
+    fields = ['body']
+
+    def form_valid(self, form):
+        form.instance.comment_id = self.kwargs['pk']
+        form.instance.name = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.name:
+            return True
+        return False
+
+    def get_success_url(self):
+        pk = self.kwargs["post_pk"]
+        return reverse('post-detail', kwargs={"pk": pk})
 
 
 def about(request):

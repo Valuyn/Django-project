@@ -31,22 +31,22 @@
     </h4>
     <a class="btn-secondary btn-sm mt-1 mb-1" href="{% url 'comment-create' post.pk %}">Add comment</a>
     {% for comment in post.comments.all %}
-    <article class="media content-section">
-      <img class="rounded-circle article-img" src="{{ comment.name.profile.image.url }}">
-      <div class="media-body">
-        <div class="article-metadata">
-          <a class="mr-2" >{{ comment.name }}</a>
-          <small class="text-muted">{{ comment.created|date:"F d, Y" }}</small>
-<!--          {% if comment.name == user %}-->
-<!--              <div>-->
-<!--                <a class="btn-secondary btn-sm mt-1 mb-1" href="#">Update</a>-->
-<!--                <a class="btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>-->
-<!--              </div>-->
-<!--          {% endif %}-->
-        </div>
-        <p class="article-content">{{ comment.body }}</p>
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ comment.name.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" >{{ comment.name }}</a>
+              <small class="text-muted">{{ comment.created|date:"F d, Y" }}</small>
+              {% if comment.name == user %}
+                  <div>
+                    <a class="btn-secondary btn-sm mt-1 mb-1" href="{% url 'comment-update' post_pk=post.pk pk=comment.pk %}">Update</a>
+                    <a class="btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                  </div>
+              {% endif %}
+            </div>
+            <p class="article-content">{{ comment.body }}</p>
 
-      </div>
-    </article>
+          </div>
+        </article>
     {% endfor %}
 {% endblock %}
